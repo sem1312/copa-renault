@@ -1,21 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
+import mysql.connector
+
 
 app = Flask(__name__)
 app.secret_key = 'patri'
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://ubfu8sc8ofkiljih:1JfDHSn6PwewumVhJ7Ts@bbcuq8ud7mlet2r52vqh-mysql.services.clever-cloud.com:3306/bbcuq8ud7mlet2r52vqh'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://uvygxbx3ujut3sab:gDrHqdsepK62CtCk16ei@bmf4xvockkzpjbcbrlhh-mysql.services.clever-cloud.com:3306/bmf4xvockkzpjbcbrlhh'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
-db = mysql.connector.connect(
-            host="bbcuq8ud7mlet2r52vqh-mysql.services.clever-cloud.com",
-            user="ubfu8sc8ofkiljih",
-            password="ubfu8sc8ofkiljih",
-            database="bbcuq8ud7mlet2r52vqh"
-        )
 
 # tabla usuarios
 class User(db.Model):
@@ -144,6 +139,21 @@ def perfil():
         flash('Inicie sesión primero.')
         return redirect(url_for('login'))
 
+@app.route('/cantina')
+def cantina():
+    if 'nombres' in session:
+       nombre_ususario = session['nombres']
+       return render_template('cantina.html')
+    else:
+        flash('Inicie sesión primero.')
+        return redirect(url_for('login'))
+
+@app.route('/carrito')
+def carrito():
+    # logic for carrito
+    return render_template('carrito.html')
+
+
 @app.route('/agregar', methods=['GET', 'POST'])
 def agregar():
     if request.method == 'POST':
@@ -202,7 +212,7 @@ def agregar_pedido():
         session['pedidos'].append({'producto': producto, 'precio': precio, 'cliente': cliente})
 
         flash('Pedido agregado al carrito.')
-        return redirect(url_for('index'))
+        return redirect(url_for('carrito'))
 
 @app.route('/finalizar_pedido', methods=['POST'])
 def finalizar_pedido():
@@ -218,7 +228,10 @@ def finalizar_pedido():
     else:
         flash('No hay pedidos en el carrito.')
 
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=3500)
