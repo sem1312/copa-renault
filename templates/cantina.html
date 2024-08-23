@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% endblock %}
+
+{% block title %}Copa Renault{% endblock %}
+
+{% block body %}
+<h1>Cantina</h1>
+
+<h2>Menú de Comida</h2>
+<div class="menu-container">
+  <form action="{{ url_for('agregar_pedido') }}" method="post">
+    <div class="menu-item">
+      <button type="submit" name="producto" value="Pizza">
+        Pizza
+        <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <button type="submit" name="producto" value="Hamburguesa">
+        Hamburguesa
+        <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <button type="submit" name="producto" value="Coca">
+        Coca
+        <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <button type="submit" name="producto" value="Cono de Papas">
+        Cono de Papas
+        <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <button type="submit" name="producto" value="Pebete">
+        Pebete
+        <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <form action="{{ url_for('carrito') }}" method="get">
+        <button type="submit">Ir al Carrito</button>
+    </form>
+    
+
+  </form>
+{% endblock %}

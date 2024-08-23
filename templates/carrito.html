@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Copa Renault{% endblock %}
+
+{% block body %}
+
+<h1>Carrito de Compras</h1>
+    <ul>
+        {% if pedidos %}
+            {% for pedido in pedidos %}
+                <li>{{ pedido.producto }} - ${{ pedido.precio }} (Cliente: {{ pedido.cliente }})</li>
+            {% endfor %}
+        {% else %}
+            <li>El carrito está vacío.</li>
+        {% endif %}
+    </ul>
+
+    <form action="{{ url_for('finalizar_pedido') }}" method="post">
+        <button type="submit">Finalizar Pedido</button>
+    </form>
