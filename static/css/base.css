@@ -1,52 +1,176 @@
-body {
-    font-family: 'Garamond', serif;
+/* General Reset and Global Styles */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    font-size: 16px; /* Base size for rem units */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    line-height: 1.6;
+    background-color: #3c3c3c; /* Light background for contrast */
+    color: white; /* Dark text for readability */
+    padding: 20px;
+}
+
 h1 {
+    font-family: 'Optima', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     text-align: center;
-    margin-bottom: 20px; /* Espaciado entre h1 y el resto del contenido */
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 2.5rem;
+    color: white; /* Slightly darker for contrast */
+    font-weight: bold;
 }
 
 p {
-    margin-left: 20px; /* Margen a la izquierda */
-    margin-right: 20px; /* Margen a la derecha */
-    font-size: 18px; /* Tamaño de fuente más grande */
+    margin-top: 1.5rem;
+    margin: 1rem 0;
+    padding: 0 2rem;
+    font-size: 1.125rem; /* Relative font size for better scalability */
+    line-height: 1.8;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+/* Contact Form Container */
 .contact-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 2rem auto;
 }
 
+/* Form Styling */
 .contact-form form {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    width: 100%;
 }
 
 .form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 .form-group label {
-    width: 100px; /* Ajusta este valor según tus necesidades */
-    margin-right: 10px;
+    display: block;
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
 }
 
-.form-group input, 
+.form-group input,
 .form-group textarea {
-    flex: 1;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
 }
 
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #007BFF; /* Blue focus color */
+    outline: none;
+}
+
+/* Textarea Styling */
+textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* Button Styling */
 button {
-    align-self: center;
-    padding: 10px 20px;
-    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #e0e0e0; /* Gris claro */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    padding: 1rem 2rem; /* Espaciado interno */
+    position: relative;
+    z-index: 10;
+}
+
+.navbar .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333; /* Gris oscuro */
+    text-transform: uppercase;
+}
+
+.navbar .navbar-brand:hover {
+    color: #007BFF; /* Efecto hover en el logo o nombre */
+    text-decoration: none;
+}
+
+.navbar-nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    margin-left: 1.5rem;
+}
+
+.navbar-nav .nav-item .nav-link {
+    font-size: 1rem;
+    color: #555; /* Gris medio */
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #007BFF; /* Azul en hover */
+}
+
+.navbar-toggler {
+    border: none;
+    background-color: transparent;
+    color: #333;
+}
+
+.navbar-toggler:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Dropdown Styling */
+.navbar-nav .dropdown-menu {
+    background-color: #f0f0f0; /* Gris claro */
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Sombra sutil para el dropdown */
+    border: none;
+}
+
+.navbar-nav .dropdown-item {
+    color: #333; /* Gris oscuro */
+    padding: 0.5rem 1.5rem;
+}
+
+.navbar-nav .dropdown-item:hover {
+    background-color: #e0e0e0;
+    color: #007BFF; /* Azul en hover */
 }
