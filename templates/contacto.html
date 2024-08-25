@@ -6,7 +6,7 @@
 <h1>Contacto</h1>
 
 <section class="contact-form">
-    <h2>Formulario de contacto</h2>
+    <h2 style="color:black">Formulario de contacto</h2>
     <form action="{{ url_for('submit_contact') }}" method="post">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
@@ -23,37 +23,4 @@
         <button type="submit">Enviar</button>
     </form>
 </section>
-
-<style>
-    .contact-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .contact-form form {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .form-group {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-    .form-group label {
-        width: 100px;
-        margin-right: 10px;
-    }
-    .form-group input, 
-    .form-group textarea {
-        flex: 1;
-    }
-    button {
-        align-self: center;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-</style>
-
 {% endblock %}
