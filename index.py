@@ -139,19 +139,35 @@ def perfil():
         flash('Inicie sesión primero.')
         return redirect(url_for('login'))
 
-@app.route('/cantina')
+@app.route('/cantina', methods=['GET', 'POST'])
 def cantina():
-    if 'nombres' in session:
-       nombre_ususario = session['nombres']
-       return render_template('cantina.html')
-    else:
-        flash('Inicie sesión primero.')
-        return redirect(url_for('login'))
+    if request.method == 'POST':
+        producto = request.form.get("producto")
+        precio = int(request.form.get("precio", 0))
+        cantidad = int(request.form.get("cantidad", 1))  # Default to 1 if not provided
 
-@app.route('/carrito')
-def carrito():
-    # logic for carrito
-    return render_template('carrito.html')
+        if 'nombres' not in session:
+            flash('Debe iniciar sesión para realizar un pedido.')
+            return redirect(url_for('login'))
+
+        cliente = session['nombres']
+
+        if 'pedidos' not in session:
+            session['pedidos'] = []
+
+        session['pedidos'].append({
+            'producto': producto,
+            'precio': precio,
+            'cantidad': cantidad,
+            'total': cantidad * precio,
+            'cliente': cliente
+            })
+
+        return redirect(url_for('cantina'))
+
+    # Handle GET request: Pass cart items to the template
+    pedidos = session.get('pedidos', [])
+    return render_template('cantina.html', pedidos=pedidos)
 
 
 @app.route('/agregar', methods=['GET', 'POST'])
@@ -194,43 +210,26 @@ def agregar():
 
     return render_template('agregar.html')
 
-@app.route('/agregar_pedido', methods=['POST'])
-def agregar_pedido():
-    if request.method == 'POST':
-        producto = request.form["producto"]
-        precio = int(request.form["precio"])
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    # Ensure the user is logged in
+    if 'nombres' not in session:
+        flash('Debe iniciar sesión para realizar un pedido.')
+        return redirect(url_for('login'))
+    
+    # Get the cart items from the session
+    pedidos = session.get('pedidos', [])
 
-        if 'nombres' not in session:
-            flash('Debe iniciar sesión para realizar un pedido.')
-            return redirect(url_for('login'))
+    if not pedidos:
+        flash('El carrito está vacío.')
+        return redirect(url_for('cantina'))
 
-        cliente = session['nombres']
+    # Here you would typically process the order (e.g., save to database)
+    # For now, we'll just clear the cart
+    session.pop('pedidos', None)  # Clear the cart
 
-        if 'pedidos' not in session:
-            session['pedidos'] = []
-
-        session['pedidos'].append({'producto': producto, 'precio': precio, 'cliente': cliente})
-
-        flash('Pedido agregado al carrito.')
-        return redirect(url_for('carrito'))
-
-@app.route('/finalizar_pedido', methods=['POST'])
-def finalizar_pedido():
-    if 'pedidos' in session:
-        pedidos = session.pop('pedidos', [])
-
-        for pedido in pedidos:
-            nuevo_pedido = Pedido(producto=pedido['producto'], precio=pedido['precio'], cliente=pedido['cliente'])
-            db.session.add(nuevo_pedido)
-        db.session.commit()
-
-        flash('Pedidos finalizados correctamente.')
-    else:
-        flash('No hay pedidos en el carrito.')
-
+    # Redirect to the home page
     return redirect(url_for('home'))
-
-
 
 
 if __name__ == '__main__':
