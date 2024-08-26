@@ -144,7 +144,7 @@ def cantina():
     if request.method == 'POST':
         producto = request.form.get("producto")
         precio = int(request.form.get("precio", 0))
-        cantidad = int(request.form.get("cantidad", 1))  # Default to 1 if not provided
+        cantidad = int(request.form.get("cantidad", 1))
 
         if 'nombres' not in session:
             flash('Debe iniciar sesión para realizar un pedido.')
@@ -152,22 +152,27 @@ def cantina():
 
         cliente = session['nombres']
 
+        # Inicializa la lista de pedidos si no existe
         if 'pedidos' not in session:
             session['pedidos'] = []
 
-        session['pedidos'].append({
+        # Agrega el nuevo pedido a la lista de pedidos
+        pedido = {
             'producto': producto,
             'precio': precio,
             'cantidad': cantidad,
             'total': cantidad * precio,
             'cliente': cliente
-            })
+        }
 
-        return redirect(url_for('cantina'))
+        session['pedidos'].append(pedido)
+        session.modified = True  # Marca la sesión como modificada para guardar los cambios
 
-    # Handle GET request: Pass cart items to the template
+        flash(f"{producto} agregado al carrito.")
+
     pedidos = session.get('pedidos', [])
     return render_template('cantina.html', pedidos=pedidos)
+
 
 
 @app.route('/agregar', methods=['GET', 'POST'])
@@ -212,21 +217,18 @@ def agregar():
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
-    # Ensure the user is logged in
+
     if 'nombres' not in session:
         flash('Debe iniciar sesión para realizar un pedido.')
         return redirect(url_for('login'))
     
-    # Get the cart items from the session
     pedidos = session.get('pedidos', [])
 
     if not pedidos:
         flash('El carrito está vacío.')
         return redirect(url_for('cantina'))
 
-    # Here you would typically process the order (e.g., save to database)
-    # For now, we'll just clear the cart
-    session.pop('pedidos', None)  # Clear the cart
+    session.pop('pedidos', None)  
 
     # Redirect to the home page
     return redirect(url_for('home'))
