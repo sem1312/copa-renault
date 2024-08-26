@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<section class="contact-form">
+<h2 style="color: black">Login</h2>
+<form method="post" action="{{ url_for('login') }}"><link>
+    <div class="form-group">
+        <label for="nombres">Nombre:</label>
+        <input type="text" id="nombres" name="nombres" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">Login</button>
+    <div class="sign-in-container">
+        <label>Si no tienes una cuenta crea una ahora!</label>
+        <a href="{{ url_for('sign_in') }}" class="btn">Sign in</a>
+    </div>
+</form>
+</section>
+{% endblock %}

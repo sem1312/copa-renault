@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% endblock %}
+
+{% block title %}Cantina{% endblock %}
+
+{% block body %}
+<h1>Cantina</h1>
+
+<h2>Menú de Comida</h2>
+<div class="menu-container">
+  <form action="{{ url_for('cantina') }}" method="post">
+    <div class="menu-item">
+      <p style="color:black;">Pizza</p>
+      <input type="number" name="cantidad" value="1" min="1" style="width: 60px;">
+      <button type="submit" name="producto" value="Pizza">Agregar al carrito
+      <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <p style="color:black;">Hamburguesa</p>
+      <input type="number" name="cantidad" value="1" min="1" style="width: 60px;">
+      <button type="submit" name="producto" value="Hamburguesa">Agregar al carrito
+      <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <p style="color:black;">Coca</p>
+      <input type="number" name="cantidad" value="1" min="1" style="width: 60px;">
+      <button type="submit" name="producto" value="Coca">Agregar al carrito
+      <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <p style="color:black;">Cono de Papas</p>
+      <input type="number" name="cantidad" value="1" min="1" style="width: 60px;">
+      <button type="submit" name="producto" value="Cono de Papas">Agregar al carrito
+      <input type="hidden" name="precio" value="2000"></button>
+    </div>
+    <div class="menu-item">
+      <p style="color:black;">Pebete</p>
+      <input type="number" name="cantidad" value="1" min="1" style="width: 60px;">
+      <button type="submit" name="producto" value="Pebete">Agregar al carrito
+      <input type="hidden" name="precio" value="2000"></button>
+    </div>
+  </form>
+</div>
+
+<h2>Carrito</h2>
+{% if pedidos %}
+    <ul>
+        {% for item in pedidos %}
+            <li>{{ item.producto }} - Cantidad: {{ item.cantidad }} - Precio Total: ${{ item.total }}</li>
+        {% endfor %}
+    </ul>
+    <form action="{{ url_for('checkout') }}" method="post">
+        <button type="submit">Checkout</button>
+    </form>
+{% else %}
+    <p>Tu carrito está vacío.</p>
+{% endif %}
+
+{% endblock %}
