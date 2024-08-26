@@ -76,12 +76,10 @@ def sign_in():
             flash('Se necesitan nombre y contraseña')
             return redirect(url_for('sign_in'))
 
-        # Verifica si existe en la base de datos
         if User.query.filter_by(username=nombre).first():
             flash('El usuario ya existe. Por favor, elija otro nombre de usuario.')
             return redirect(url_for('sign_in'))
 
-        # Crea un nuevo usuario y lo agrega a la base 
         new_user = User(username=nombre, password=contraseña)
         db.session.add(new_user)
         db.session.commit()
@@ -152,11 +150,9 @@ def cantina():
 
         cliente = session['nombres']
 
-        # Inicializa la lista de pedidos si no existe
         if 'pedidos' not in session:
             session['pedidos'] = []
 
-        # Agrega el nuevo pedido a la lista de pedidos
         pedido = {
             'producto': producto,
             'precio': precio,
@@ -166,7 +162,7 @@ def cantina():
         }
 
         session['pedidos'].append(pedido)
-        session.modified = True  # Marca la sesión como modificada para guardar los cambios
+        session.modified = True 
 
         flash(f"{producto} agregado al carrito.")
 
@@ -184,7 +180,6 @@ def agregar():
         equipo2_nombre = request.form['equipo2']
         puntuacion2 = int(request.form['puntuacion2'])
 
-        # Verifica si los equipos existen en la base y los crea si no hay
         equipo1 = Equipo.query.filter_by(nombre=equipo1_nombre).first()
         if not equipo1:
             equipo1 = Equipo(nombre=equipo1_nombre)
@@ -205,7 +200,6 @@ def agregar():
         else:
             ganador = 'Empate'
 
-        # Crea un nuevo resultado
         resultado = Resultado(deporte=deporte, equipo1_id=equipo1.id, equipo2_id=equipo2.id, puntuacion1=puntuacion1, puntuacion2=puntuacion2, ganador=ganador)
         db.session.add(resultado)
         db.session.commit()
@@ -230,7 +224,6 @@ def checkout():
 
     session.pop('pedidos', None)  
 
-    # Redirect to the home page
     return redirect(url_for('home'))
 
 
