@@ -50,9 +50,21 @@ class Pedido(db.Model):
     producto = db.Column(db.String(50), nullable=False)
     precio = db.Column(db.Integer, nullable=False)
     cliente = db.Column(db.String(50), nullable=False)
-
+    cantidad = db.Column(db.Integer, nullable=False)
     def __repr__(self):
         return f'<Pedido id={self.id} compra={self.compra} precio={self.precio} cliente={self.cliente}>'
+
+class PedidoArchivado(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    producto = db.Column(db.String(50), nullable=False)
+    precio = db.Column(db.Integer, nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False)
+    cliente = db.Column(db.String(50), nullable=False)
+    
+
+    def __repr__(self):
+        return f'<PedidoArchivado id={self.id} producto={self.producto} precio={self.precio} cliente={self.cliente} fecha={self.fecha}>'
+
 
 # Crea todas las tablas
 with app.app_context():
@@ -152,11 +164,9 @@ def cantina():
 
         cliente = session['nombres']
 
-        # Inicializa la lista de pedidos si no existe
         if 'pedidos' not in session:
             session['pedidos'] = []
 
-        # Agrega el nuevo pedido a la lista de pedidos
         pedido = {
             'producto': producto,
             'precio': precio,
@@ -166,7 +176,7 @@ def cantina():
         }
 
         session['pedidos'].append(pedido)
-        session.modified = True  # Marca la sesión como modificada para guardar los cambios
+        session.modified = True 
 
         flash(f"{producto} agregado al carrito.")
 
@@ -217,22 +227,30 @@ def agregar():
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
-
     if 'nombres' not in session:
         flash('Debe iniciar sesión para realizar un pedido.')
         return redirect(url_for('login'))
-    
+
     pedidos = session.get('pedidos', [])
 
     if not pedidos:
         flash('El carrito está vacío.')
         return redirect(url_for('cantina'))
 
-    session.pop('pedidos', None)  
+    # Mover pedidos a la tabla PedidoArchivado
+    for item in pedidos:
+        pedido_archivado = PedidoArchivado(
+            producto=item['producto'],
+            precio=item['precio'],
+            cantidad=item['cantidad'],
+            cliente=session['nombres']
+        )
+        db.session.add(pedido_archivado)
 
-    # Redirect to the home page
+    db.session.commit()
+
+    # Limpiar el carrito después de la compra
+    session.pop('pedidos', None)
+
+    flash('Pedido realizado y archivado con éxito.')
     return redirect(url_for('home'))
-
-
-if __name__ == '__main__':
-    app.run(debug=True, port=3500)
